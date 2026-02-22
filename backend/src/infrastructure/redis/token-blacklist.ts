@@ -13,6 +13,10 @@ export const blacklistAccessToken = async (
     expiresInSeconds: number
 ): Promise<void> => {
     const client = await getRedisClient();
+    if (!client) {
+        logger.warn("Redis client not available, skipping token blacklist");
+        return;
+    }
     const key = `${BLACKLIST_PREFIX}${jti}`;
 
     await client.setEx(key, expiresInSeconds, "1");
@@ -26,6 +30,10 @@ export const blacklistAccessToken = async (
  */
 export const isAccessTokenBlacklisted = async (jti: string): Promise<boolean> => {
     const client = await getRedisClient();
+    if (!client) {
+        logger.warn("Redis client not available, assuming token not blacklisted");
+        return false;
+    }
     const key = `${BLACKLIST_PREFIX}${jti}`;
 
     const result = await client.exists(key);
@@ -38,6 +46,10 @@ export const isAccessTokenBlacklisted = async (jti: string): Promise<boolean> =>
  */
 export const removeFromBlacklist = async (jti: string): Promise<void> => {
     const client = await getRedisClient();
+    if (!client) {
+        logger.warn("Redis client not available, skipping token removal");
+        return;
+    }
     const key = `${BLACKLIST_PREFIX}${jti}`;
 
     await client.del(key);

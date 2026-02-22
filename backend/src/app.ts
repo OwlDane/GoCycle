@@ -1,4 +1,5 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import applyCors from "./middlewares/cors.middleware";
 import logger from "./infrastructure/logging/logger";
 import morgan from "morgan";
@@ -11,12 +12,14 @@ import diyRoute from "./interfaces/http/express/routes/diy.route";
 import impactRoute from "./interfaces/http/express/routes/impact.route";
 import journeyRoute from "./interfaces/http/express/routes/journey.route";
 import makersRoute from "./interfaces/http/express/routes/makers.route";
+import authRoute from "./interfaces/http/express/routes/auth.route";
 
 const app = express();
 
 app.set("trust proxy", true);
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(applyCors);
 
 morgan.token("date", (req, res, tz) => {
@@ -47,6 +50,9 @@ app.use("/api/diy", diyRoute);
 app.use("/api/impact", impactRoute);
 app.use("/api/journey", journeyRoute);
 app.use("/api/makers", makersRoute);
+
+// Auth endpoints
+app.use("/api/auth", authRoute);
 
 app.get("/status", (req, res) => {
     res.status(200).json({

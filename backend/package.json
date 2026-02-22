@@ -19,9 +19,12 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "seed": "ts-node src/infrastructure/database/seeders/index.ts"
+    "seed": "ts-node src/infrastructure/database/seeders/index.ts",
+    "generate-password": "ts-node scripts/generate-password-hash.ts"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.5",
     "@types/jsonwebtoken": "^9.0.10",
@@ -36,6 +39,8 @@
     "@types/multer": "^2.0.0",
     "@types/sharp": "^0.31.1",
     "argon2": "^0.44.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
