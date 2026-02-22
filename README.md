@@ -1,43 +1,61 @@
 # GoCycle
 
-Platform edukasi showcase untuk produk daur ulang dan tutorial DIY ramah lingkungan. Menampilkan karya eco-makers Indonesia dengan storytelling yang menginspirasi dan impact metrics yang terukur.
+Platform edukasi dan showcase untuk produk daur ulang serta tutorial DIY ramah lingkungan. Menampilkan karya eco-makers Indonesia dengan storytelling yang menginspirasi dan impact metrics yang terukur.
 
-## Overview
+## Deskripsi
 
-GoCycle adalah platform showcase yang menghubungkan eco-makers dengan komunitas untuk berbagi inspirasi, tutorial, dan dampak positif dari daur ulang sampah. Platform ini fokus pada edukasi dan awareness, bukan transaksi komersial.
+GoCycle adalah platform showcase yang menghubungkan eco-makers dengan komunitas untuk berbagi inspirasi, tutorial, dan dampak positif dari daur ulang sampah. Platform ini fokus pada edukasi dan awareness, bukan transaksi komersial. Dilengkapi dengan sistem admin CMS yang aman untuk mengelola konten.
 
-### Key Features
+## Fitur Utama
 
-- **Product Showcase**: Galeri produk daur ulang dengan cerita di balik setiap karya
-- **DIY Tutorials**: Panduan step-by-step membuat produk dari sampah
-- **Impact Metrics**: Real-time statistics dampak lingkungan (CO2, waste saved)
-- **Waste Journey**: Simulasi interaktif lifecycle sampah (recycle vs dispose)
-- **Eco Makers**: Profil pembuat karya dan studio mereka
+### Untuk Pengguna
+- **Showcase Produk**: Galeri produk daur ulang dengan cerita inspiratif di balik setiap karya
+- **Tutorial DIY**: Panduan langkah demi langkah membuat produk dari sampah dengan tingkat kesulitan bervariasi
+- **Statistik Dampak**: Metrik real-time dampak lingkungan (CO2 berkurang, sampah terselamatkan)
+- **Simulasi Perjalanan Sampah**: Visualisasi interaktif lifecycle sampah (recycle vs dispose)
+- **Profil Eco Makers**: Informasi lengkap pembuat karya dan studio mereka
+- **Halaman Edukasi**: Konten edukatif tentang pengelolaan sampah dan daur ulang
 
-## Tech Stack
+### Untuk Admin
+- **Dashboard Analytics**: Overview statistik platform dengan visualisasi data
+- **Manajemen Produk**: CRUD produk showcase dengan upload gambar
+- **Manajemen Tutorial**: CRUD tutorial DIY dengan step-by-step instructions
+- **Manajemen Eco Makers**: CRUD profil maker dan studio
+- **Statistik Dampak**: Monitor dan update impact metrics
+- **Media Library**: Pengelolaan file media (coming soon)
+- **Pengaturan**: Konfigurasi aplikasi dan preferensi sistem
+- **Autentikasi Aman**: Login dengan JWT dan HTTP-only cookies
+
+## Teknologi
 
 ### Backend
-- Node.js + TypeScript
-- Express.js
-- PostgreSQL (Supabase)
-- TypeORM
-- Redis (optional caching)
-- Clean Architecture
+- **Runtime**: Node.js 18+ dengan TypeScript
+- **Framework**: Express.js
+- **Database**: PostgreSQL (Supabase dengan Session Pooler)
+- **ORM**: TypeORM
+- **Cache**: Redis (opsional, non-blocking)
+- **Authentication**: JWT dengan bcrypt
+- **Architecture**: Clean Architecture Pattern
+- **Logging**: Winston dengan daily rotate
+- **Upload**: Multer + Sharp untuk image processing
 
 ### Frontend
-- NextJS + TypeScript
-- TailwindCSS
-- React Router
+- **Framework**: Next.js 15 dengan TypeScript
+- **Styling**: TailwindCSS
+- **UI Components**: Custom components dengan Tabler Icons
+- **Animation**: Framer Motion
+- **State Management**: React Context API
+- **HTTP Client**: Fetch API dengan credentials
 
-## Getting Started
+## Instalasi dan Konfigurasi
 
-### Prerequisites
+### Prasyarat
+- Node.js versi 18 atau lebih tinggi
+- PostgreSQL atau akun Supabase
+- Redis (opsional untuk caching)
+- npm atau yarn
 
-- Node.js 18+
-- PostgreSQL (or Supabase account)
-- Redis (optional)
-
-### Backend Setup
+### Setup Backend
 
 ```bash
 cd backend
@@ -45,23 +63,56 @@ cd backend
 # Install dependencies
 npm install
 
-# Configure environment
+# Konfigurasi environment
 cp .env.example .env
-# Edit .env with your database credentials
+# Edit .env dengan kredensial database Anda
 
-# Run database migrations
+# Build TypeScript
 npm run build
 
-# Seed database with dummy data
+# Seed database dengan data dummy
 npm run seed
 
-# Start development server
+# Generate password hash untuk admin (opsional)
+npm run generate-password your-password
+
+# Jalankan development server
 npm run dev
 ```
 
-Backend runs on `http://localhost:5000`
+Server backend berjalan di `http://localhost:5000`
 
-### Frontend Setup
+#### Konfigurasi Environment Backend
+
+File `.env` harus berisi:
+```env
+# Server
+PORT=5000
+NODE_ENV=development
+
+# Database (Supabase)
+DATABASE_URL=your-postgresql-connection-string
+DB_SSL=false
+TYPEORM_SYNC=true
+TYPEORM_LOGGING=true
+
+# CORS
+CORS_ALLOWED_ORIGINS=http://localhost:3000
+CORS_ALLOW_CREDENTIALS=true
+
+# Admin Authentication
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD_HASH=generated-hash
+JWT_SECRET=your-secret-key-min-32-chars
+
+# Redis (Optional)
+REDIS_URL=redis://localhost:6379
+
+# Upload
+UPLOADS_BASE_URL=http://localhost:5000/uploads
+```
+
+### Setup Frontend
 
 ```bash
 cd frontend
@@ -69,20 +120,132 @@ cd frontend
 # Install dependencies
 npm install
 
-# Start development server
+# Konfigurasi environment
+cp .env.example .env
+# Edit .env dengan URL backend
+
+# Jalankan development server
 npm run dev
 ```
 
-Frontend runs on `http://localhost:5173`
+Server frontend berjalan di `http://localhost:3000`
 
-### Product Categories
+```
+gocycle/
+├── backend/
+│   ├── src/
+│   │   ├── application/        # Business logic & services
+│   │   │   ├── auth/           # Authentication services
+│   │   │   ├── diy/            # DIY tutorial services
+│   │   │   ├── impact/         # Impact metrics services
+│   │   │   ├── journey/        # Waste journey services
+│   │   │   ├── makers/         # Eco makers services
+│   │   │   ├── product/        # Product services
+│   │   │   └── showcase/       # Showcase services
+│   │   ├── config/             # Configuration files
+│   │   ├── domain/             # Domain entities & enums
+│   │   ├── infrastructure/     # Database, Redis, Logging
+│   │   ├── interfaces/         # HTTP controllers & routes
+│   │   ├── middlewares/        # Express middlewares
+│   │   └── app.ts              # Express app setup
+│   ├── scripts/                # Utility scripts
+│   └── package.json
+│
+├── frontend/
+│   ├── app/
+│   │   ├── (main)/            # Public pages
+│   │   │   ├── page.tsx       # Homepage
+│   │   │   ├── showcase/      # Product showcase
+│   │   │   ├── edukasi/       # Education pages
+│   │   │   ├── impakers/      # Eco makers profiles
+│   │   │   └── tentang/       # About page
+│   │   └── admin/             # Admin CMS
+│   │       ├── login/         # Admin login
+│   │       ├── products/      # Product management
+│   │       ├── tutorials/     # Tutorial management
+│   │       ├── makers/        # Maker management
+│   │       ├── impact/        # Impact stats
+│   │       ├── media/         # Media library
+│   │       └── settings/      # Settings
+│   ├── components/            # React components
+│   ├── contexts/              # React contexts (Auth)
+│   ├── lib/                   # Utilities & API client
+│   └── package.json
+│
+└── README.md
+```
 
-HOME_DECOR, FASHION, FURNITURE, ACCESSORIES, TOYS, STORAGE, GARDEN, LIGHTING
+## API Endpoints
 
-### Waste Types
+### Public Endpoints
+- `GET /api/showcase/products` - List produk showcase
+- `GET /api/showcase/products/:id` - Detail produk
+- `GET /api/showcase/featured` - Produk featured
+- `GET /api/diy/tutorials` - List tutorial DIY
+- `GET /api/diy/tutorials/:id` - Detail tutorial
+- `POST /api/diy/tutorials/:id/complete` - Mark tutorial selesai
+- `GET /api/impact/stats` - Statistik dampak lingkungan
+- `POST /api/impact/increment` - Increment counter
+- `POST /api/journey/simulate` - Simulasi perjalanan sampah
+- `GET /api/makers` - List eco makers
+- `GET /api/makers/:id` - Detail maker
 
-PLASTIC, GLASS, METAL, CARDBOARD, TEXTILE, ORGANIC, ELECTRONIC
+### Auth Endpoints
+- `POST /api/auth/login` - Login admin
+- `POST /api/auth/logout` - Logout admin
+- `GET /api/auth/verify` - Verify session
+
+## Kategori dan Enumerasi
+
+### Kategori Produk
+`HOME_DECOR`, `FASHION`, `FURNITURE`, `ACCESSORIES`, `TOYS`, `STORAGE`, `GARDEN`, `LIGHTING`
+
+### Jenis Sampah
+`PLASTIC`, `GLASS`, `METAL`, `CARDBOARD`, `TEXTILE`, `ORGANIC`, `ELECTRONIC`
+
+### Tingkat Kesulitan
+`EASY`, `MEDIUM`, `HARD`
+
+### Aksi Perjalanan Sampah
+`RECYCLE`, `DISPOSE`
+
+## Development
+
+### Backend Commands
+```bash
+npm run dev          # Development server dengan hot reload
+npm run build        # Build TypeScript ke JavaScript
+npm run start        # Production server
+npm run seed         # Seed database dengan data dummy
+npm run generate-password  # Generate password hash
+```
+
+### Frontend Commands
+```bash
+npm run dev          # Development server
+npm run build        # Production build
+npm run start        # Production server
+npm run lint         # Lint code
+```
+
+## Security Best Practices
+
+1. **Ganti kredensial default** sebelum deployment
+2. **Gunakan HTTPS** di production
+3. **Set strong JWT_SECRET** minimal 32 karakter
+4. **Enable rate limiting** untuk endpoint login
+5. **Regular security updates** untuk dependencies
+6. **Backup database** secara berkala
+7. **Monitor logs** untuk aktivitas mencurigakan
+
+## Kontribusi
+
+Proyek ini dikembangkan untuk kompetisi dan edukasi. Kontribusi dan saran sangat diterima.
+
+## Lisensi
+
+Proyek ini dikembangkan untuk tujuan edukasi dan kompetisi.
 
 ---
 
-Built with passion for sustainability and education.
+Dibangun dengan fokus pada keberlanjutan dan edukasi lingkungan.
